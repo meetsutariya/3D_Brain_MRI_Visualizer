@@ -10,6 +10,50 @@ export function destroyGUI() {
   }
 }
 
+function updateCrosshair(containerId, x, y) {
+    const svgNamespace = "http://www.w3.org/2000/svg";
+  
+    let svg = document.getElementById(containerId + "-svg");
+    if (!svg) {
+      svg = document.createElementNS(svgNamespace, "svg");
+      svg.setAttribute("id", containerId + "-svg");
+      svg.style.position = "absolute";
+      svg.style.top = "0";
+      svg.style.left = "0";
+      svg.style.width = "100%";
+      svg.style.height = "100%";
+      svg.style.pointerEvents = "none";
+      document.getElementById(containerId).appendChild(svg);
+    }
+  
+    let lineX = document.getElementById(containerId + "-lineX");
+    let lineY = document.getElementById(containerId + "-lineY");
+  
+    if (!lineX) {
+      lineX = document.createElementNS(svgNamespace, "line");
+      lineX.setAttribute("id", containerId + "-lineX");
+      lineX.setAttribute("stroke", "red");
+      svg.appendChild(lineX);
+    }
+  
+    if (!lineY) {
+      lineY = document.createElementNS(svgNamespace, "line");
+      lineY.setAttribute("id", containerId + "-lineY");
+      lineY.setAttribute("stroke", "red");
+      svg.appendChild(lineY);
+    }
+  
+    lineX.setAttribute("x1", x);
+    lineX.setAttribute("y1", "0");
+    lineX.setAttribute("x2", x);
+    lineX.setAttribute("y2", "100%");
+  
+    lineY.setAttribute("x1", "0");
+    lineY.setAttribute("y1", y);
+    lineY.setAttribute("x2", "100%");
+    lineY.setAttribute("y2", y);
+  }
+
 export function initialize(niiFile) {
 
     destroyGUI();
@@ -26,7 +70,7 @@ export function initialize(niiFile) {
         try {
             // try to create and initialize a 3D renderer
             threeD = new X.renderer3D();
-            threeD.container = '3d';
+            threeD.container = 'threeD';
             threeD.init();
         } catch (Exception) {
 
@@ -143,6 +187,9 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
+    // Update crosshair
+    updateCrosshair("sliceX", x, y);
+
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / this.offsetWidth;
     const normalizedY = y / this.offsetHeight;
@@ -165,6 +212,9 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
+    // Update crosshair
+    updateCrosshair("sliceY", x, y);
+
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / this.offsetWidth;
     const normalizedY = y / this.offsetHeight;
@@ -186,6 +236,9 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     const rect = this.getBoundingClientRect();
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
+
+    // Update crosshair
+    updateCrosshair("sliceZ", x, y);
 
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / this.offsetWidth;

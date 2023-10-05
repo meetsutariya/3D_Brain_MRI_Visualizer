@@ -18,7 +18,9 @@ const FileUploader = ({ setUploadedFile }) => {
   return (
     <div>
       <h1>Upload NII File</h1>
-      <input type="file" onChange={handleChange} />
+
+      <input type="file" id='files' onChange={handleChange}/>
+
     </div>
   );
 };
