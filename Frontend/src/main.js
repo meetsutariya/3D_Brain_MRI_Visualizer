@@ -137,6 +137,73 @@ export function initialize(niiFile) {
                 volume.range[2] - 1);
             volumegui.open();
 
+// Adding mousemove event listener to sliceX container
+document.getElementById("sliceX").addEventListener("mousemove", function (event) {
+    const rect = this.getBoundingClientRect();
+    const x = event.clientX - rect.left; // x position within the element.
+    const y = event.clientY - rect.top;  // y position within the element.
+
+    // Normalize these coordinates and map them to the volume dimensions
+    const normalizedX = x / this.offsetWidth;
+    const normalizedY = y / this.offsetHeight;
+
+    const newSliceY = Math.floor(normalizedX * volume.range[1]);
+    const newSliceZ = Math.floor(normalizedY * volume.range[2]);
+
+    // Update slices in other 2D renderers
+    volume.indexY = newSliceY;
+    volume.indexZ = newSliceZ;
+
+    // Re-render slices
+    sliceY.render();
+    sliceZ.render();
+
+        });
+// Adding mousemove event listener to sliceY container
+document.getElementById("sliceY").addEventListener("mousemove", function (event) {
+    const rect = this.getBoundingClientRect();
+    const x = event.clientX - rect.left; // x position within the element.
+    const y = event.clientY - rect.top;  // y position within the element.
+
+    // Normalize these coordinates and map them to the volume dimensions
+    const normalizedX = x / this.offsetWidth;
+    const normalizedY = y / this.offsetHeight;
+
+    const newSliceX = Math.floor(normalizedX * volume.range[1]);
+    const newSliceZ = Math.floor(normalizedY * volume.range[2]);
+
+    // Update slices in other 2D renderers
+    volume.indexX = newSliceX;
+    volume.indexZ = newSliceZ;
+
+    // Re-render slices
+    sliceX.render();
+    sliceZ.render();
+
+        });
+// Adding mousemove event listener to sliceX container
+document.getElementById("sliceZ").addEventListener("mousemove", function (event) {
+    const rect = this.getBoundingClientRect();
+    const x = event.clientX - rect.left; // x position within the element.
+    const y = event.clientY - rect.top;  // y position within the element.
+
+    // Normalize these coordinates and map them to the volume dimensions
+    const normalizedX = x / this.offsetWidth;
+    const normalizedY = y / this.offsetHeight;
+
+    const newSliceX = Math.floor(normalizedX * volume.range[1]);
+    const newSliceY = Math.floor(normalizedY * volume.range[2]);
+
+    // Update slices in other 2D renderers
+    volume.indexX = newSliceX;
+    volume.indexY = newSliceY;
+
+    // Re-render slices
+    sliceX.render();
+    sliceY.render();
+
+        });
+
         
 
         // };
