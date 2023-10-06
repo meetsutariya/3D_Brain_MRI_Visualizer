@@ -2,6 +2,11 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-orange)
 
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/arnishsatasiya/BrainViz/master/Photos/brainViz.png" />
+</p>
+
 ## Overview
 BrainViz's Medical Imaging SaaS Platform is an advanced, AI-powered solution designed to assist healthcare professionals in visualizing and interacting with brain MRI scans. Built to streamline medical diagnostic procedures, our platform leverages state-of-the-art deep-learning models for tasks such as tumor segmentation and detection.
 
