@@ -257,8 +257,6 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
 
         });
 
-        
-
         // };
 
     };
