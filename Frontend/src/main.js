@@ -2,6 +2,8 @@
 /* global dat */
 
 let gui;
+let isCrosshairFixed = false;
+
 
 export function destroyGUI() {
   if (gui) {
@@ -10,7 +12,7 @@ export function destroyGUI() {
   }
 }
 
-function updateCrosshair(containerId, x, y) {
+function updateCrosshair(containerId, x, y, x_, y_, z_) {
     const svgNamespace = "http://www.w3.org/2000/svg";
   
     let svg = document.getElementById(containerId + "-svg");
@@ -52,6 +54,19 @@ function updateCrosshair(containerId, x, y) {
     lineY.setAttribute("y1", y);
     lineY.setAttribute("x2", "100%");
     lineY.setAttribute("y2", y);
+
+    // Create or update text element to display coordinates
+    let textElement = document.getElementById(containerId + "-text");
+    if (!textElement) {
+        textElement = document.createElementNS(svgNamespace, "text");
+        textElement.setAttribute("id", containerId + "-text");
+        textElement.setAttribute("fill", "white");
+        textElement.setAttribute("x", "10"); // Fixed position for simplicity
+        textElement.setAttribute("y", "20");
+        svg.appendChild(textElement);
+    }
+
+    textElement.textContent = `X: ${x_}, Y: ${y_}, Z: ${z_}`;
   }
 
 export function initialize(niiFile) {
@@ -97,6 +112,13 @@ export function initialize(niiFile) {
         sliceZ.orientation = 'Z';
         sliceZ.init();
 
+        const sliceX_width = document.getElementById("sliceX").offsetWidth;
+        const sliceX_height = document.getElementById("sliceX").offsetHeight;
+        const sliceY_width = document.getElementById("sliceY").offsetWidth;
+        const sliceY_height = document.getElementById("sliceY").offsetHeight;
+        const sliceZ_width = document.getElementById("sliceZ").offsetWidth;
+        const sliceZ_height = document.getElementById("sliceZ").offsetHeight;
+
 
         //
         // THE VOLUME DATA
@@ -126,6 +148,7 @@ export function initialize(niiFile) {
 
         // start the loading/rendering
         sliceX.render();
+
 
 
         //
@@ -181,18 +204,43 @@ export function initialize(niiFile) {
                 volume.range[2] - 1);
             volumegui.open();
 
+//click event
+
+document.getElementById("sliceX").addEventListener("click", function(event) {
+  if (isCrosshairFixed) {
+      isCrosshairFixed = false;
+  } else {
+      isCrosshairFixed = true;
+  }
+});
+document.getElementById("sliceY").addEventListener("click", function(event) {
+  if (isCrosshairFixed) {
+      isCrosshairFixed = false;
+  } else {
+      isCrosshairFixed = true;
+  }
+});
+document.getElementById("sliceZ").addEventListener("click", function(event) {
+  if (isCrosshairFixed) {
+      isCrosshairFixed = false;
+  } else {
+      isCrosshairFixed = true;
+  }
+});
+
 // Adding mousemove event listener to sliceX container
 document.getElementById("sliceX").addEventListener("mousemove", function (event) {
+
+  if(isCrosshairFixed)
+  return;
+
     const rect = this.getBoundingClientRect();
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
-    // Update crosshair
-    updateCrosshair("sliceX", x, y);
-
     // Normalize these coordinates and map them to the volume dimensions
-    const normalizedX = x / this.offsetWidth;
-    const normalizedY = y / this.offsetHeight;
+    const normalizedX = x / sliceX_width;
+    const normalizedY = y / sliceX_height;
 
     const newSliceY = Math.floor(normalizedX * volume.range[1]);
     const newSliceZ = Math.floor(normalizedY * volume.range[2]);
@@ -201,6 +249,29 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     volume.indexY = newSliceY;
     volume.indexZ = newSliceZ;
 
+    // set crosshair for other planes
+    
+    //for plane Y
+
+    const Y_normalizedX =  volume.indexX / volume.range[0];
+    const Y_normalizedZ =  volume.indexZ / volume.range[2];
+
+    const Y_boxX = Y_normalizedX * sliceY_width;
+    const Y_boxZ = Y_normalizedZ * sliceY_height;
+    
+    //for plane Z
+
+    const Z_normalizedX =  volume.indexX / volume.range[0];
+    const Z_normalizedY =  volume.indexY / volume.range[1];
+
+    const Z_boxX = Z_normalizedX * sliceZ_width;
+    const Z_boxY = Z_normalizedY * sliceZ_height;
+
+    // Update crosshair
+    updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
+
     // Re-render slices
     sliceY.render();
     sliceZ.render();
@@ -208,23 +279,47 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
         });
 // Adding mousemove event listener to sliceY container
 document.getElementById("sliceY").addEventListener("mousemove", function (event) {
+
+    if(isCrosshairFixed)
+    return;
+
     const rect = this.getBoundingClientRect();
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
-    // Update crosshair
-    updateCrosshair("sliceY", x, y);
-
     // Normalize these coordinates and map them to the volume dimensions
-    const normalizedX = x / this.offsetWidth;
-    const normalizedY = y / this.offsetHeight;
+    const normalizedX = x / sliceY_width;
+    const normalizedY = y / sliceY_height;
 
-    const newSliceX = Math.floor(normalizedX * volume.range[1]);
+    const newSliceX = Math.floor(normalizedX * volume.range[0]);
     const newSliceZ = Math.floor(normalizedY * volume.range[2]);
 
     // Update slices in other 2D renderers
     volume.indexX = newSliceX;
     volume.indexZ = newSliceZ;
+
+        // set crosshair for other planes
+    
+    //for plane X
+
+    const X_normalizedY =  volume.indexY / volume.range[1];
+    const X_normalizedZ =  volume.indexZ / volume.range[2];
+
+    const X_boxY = X_normalizedY * sliceX_width;
+    const X_boxZ = X_normalizedZ * sliceX_height;
+    
+    //for plane Z
+
+    const Z_normalizedX =  volume.indexX / volume.range[0];
+    const Z_normalizedY =  volume.indexY / volume.range[1];
+
+    const Z_boxX = Z_normalizedX * sliceZ_width;
+    const Z_boxY = Z_normalizedY * sliceZ_height;
+
+    // Update crosshair
+    updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
 
     // Re-render slices
     sliceX.render();
@@ -233,23 +328,48 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
         });
 // Adding mousemove event listener to sliceX container
 document.getElementById("sliceZ").addEventListener("mousemove", function (event) {
+
+  if(isCrosshairFixed)
+  return;
+
     const rect = this.getBoundingClientRect();
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
-
-    // Update crosshair
-    updateCrosshair("sliceZ", x, y);
 
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / this.offsetWidth;
     const normalizedY = y / this.offsetHeight;
 
-    const newSliceX = Math.floor(normalizedX * volume.range[1]);
-    const newSliceY = Math.floor(normalizedY * volume.range[2]);
+    const newSliceX = Math.floor(normalizedX * volume.range[0]);
+    const newSliceY = Math.floor(normalizedY * volume.range[1]);
 
     // Update slices in other 2D renderers
     volume.indexX = newSliceX;
     volume.indexY = newSliceY;
+
+    // set crosshair for other planes
+    
+    //for plane X
+
+    const X_normalizedY =  volume.indexY / volume.range[1];
+    const X_normalizedZ =  volume.indexZ / volume.range[2];
+
+    const X_boxY = X_normalizedY * sliceX_width;
+    const X_boxZ = X_normalizedZ * sliceX_height;
+    
+    //for plane Y
+
+    const Y_normalizedX =  volume.indexX / volume.range[0];
+    const Y_normalizedZ =  volume.indexZ / volume.range[2];
+
+    const Y_boxX = Y_normalizedX * sliceY_width;
+    const Y_boxZ = Y_normalizedZ * sliceY_height;
+
+    // Update crosshair
+    updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+    updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+
 
     // Re-render slices
     sliceX.render();
