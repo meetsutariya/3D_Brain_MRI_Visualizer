@@ -69,7 +69,7 @@ function updateCrosshair(containerId, x, y, x_, y_, z_) {
     textElement.textContent = `X: ${x_}, Y: ${y_}, Z: ${z_}`;
   }
 
-export function initialize(niiFile) {
+export async function initialize(niiFile) {
 
     destroyGUI();
     // Your existing JavaScript code, adjusted if necessary
@@ -124,6 +124,8 @@ export function initialize(niiFile) {
         // THE VOLUME DATA
         //
         // create a X.volume
+
+        // console.log(X)
         volume = new X.volume();
         // .. and attach the single-file dicom in .NRRD format
         // this works with gzip/gz/raw encoded NRRD files but XTK also supports other
@@ -133,7 +135,32 @@ export function initialize(niiFile) {
         // console.log(fileURL)
         // console.log("type: " + typeof(volume.file))
         // volume.file = './Brats18_2013_1_1_t1ce.nii';
+
+        console.log("1:", volume.file)
+        console.log(volume.filedata)
         volume.file=niiFile.name;
+        console.log("2:", volume.file)
+
+        // console.log(typeof(volume.filedata);
+
+        async function hey()
+        {
+          await niiFile.arrayBuffer().then(result=>{
+
+              volume.filedata = result;
+              // console.log('heyhey:', volume.filedata)
+
+            })           
+        }
+
+        const a1 = await hey();
+
+
+        console.log("volumn type : ",typeof(volume));
+        console.log("file type : " + typeof(volume.file));
+        console.log("volumn : ",volume);
+        console.log(volume['filedata'])
+
         // volume.file = 'https://x.babymri.org/?avf.nii';
         // volume.file = 'E:\my_mri_visualizer\Brats18_2013_0_1_t1.nii';
         // we also attach a label map to show segmentations on a slice-by-slice base
@@ -171,38 +198,38 @@ export function initialize(niiFile) {
                 threeD.render();
             }
 
-            console.log(gui)
+            // console.log(gui)
 
             // now the real GUI
-            gui = new dat.GUI();
-            console.log(gui)
+            // gui = new dat.GUI();
+            // console.log(gui)
 
 
-            // the following configures the gui for interacting with the X.volume
-            var volumegui = gui.addFolder('Volume');
-            // now we can configure controllers which..
-            // .. switch between slicing and volume rendering
-            var vrController = volumegui.add(volume, 'volumeRendering');
-            // .. configure the volume rendering opacity
-            var opacityController = volumegui.add(volume, 'opacity', 0, 1);
-            // .. and the threshold in the min..max range
-            var lowerThresholdController = volumegui.add(volume, 'lowerThreshold',
-                volume.min, volume.max);
-            var upperThresholdController = volumegui.add(volume, 'upperThreshold',
-                volume.min, volume.max);
-            var lowerWindowController = volumegui.add(volume, 'windowLow', volume.min,
-                volume.max);
-            var upperWindowController = volumegui.add(volume, 'windowHigh', volume.min,
-                volume.max);
-            // the indexX,Y,Z are the currently displayed slice indices in the range
-            // 0..dimensions-1
-            var sliceXController = volumegui.add(volume, 'indexX', 0,
-                volume.range[0] - 1);
-            var sliceYController = volumegui.add(volume, 'indexY', 0,
-                volume.range[1] - 1);
-            var sliceZController = volumegui.add(volume, 'indexZ', 0,
-                volume.range[2] - 1);
-            volumegui.open();
+            // // the following configures the gui for interacting with the X.volume
+            // var volumegui = gui.addFolder('Volume');
+            // // now we can configure controllers which..
+            // // .. switch between slicing and volume rendering
+            // var vrController = volumegui.add(volume, 'volumeRendering');
+            // // .. configure the volume rendering opacity
+            // var opacityController = volumegui.add(volume, 'opacity', 0, 1);
+            // // .. and the threshold in the min..max range
+            // var lowerThresholdController = volumegui.add(volume, 'lowerThreshold',
+            //     volume.min, volume.max);
+            // var upperThresholdController = volumegui.add(volume, 'upperThreshold',
+            //     volume.min, volume.max);
+            // var lowerWindowController = volumegui.add(volume, 'windowLow', volume.min,
+            //     volume.max);
+            // var upperWindowController = volumegui.add(volume, 'windowHigh', volume.min,
+            //     volume.max);
+            // // the indexX,Y,Z are the currently displayed slice indices in the range
+            // // 0..dimensions-1
+            // var sliceXController = volumegui.add(volume, 'indexX', 0,
+            //     volume.range[0] - 1);
+            // var sliceYController = volumegui.add(volume, 'indexY', 0,
+            //     volume.range[1] - 1);
+            // var sliceZController = volumegui.add(volume, 'indexZ', 0,
+            //     volume.range[2] - 1);
+            // volumegui.open();
 
 //click event
 
