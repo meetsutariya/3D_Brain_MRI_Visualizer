@@ -9,11 +9,16 @@ const FileUploader = ({ setUploadedFile }) => {
 
   const handleChange = (e) => {
     const selectedFile = e.target.files[0];
+
     if (selectedFile) {
       setUploadedFile(selectedFile);
    
       // window.localStorage.setItem("niiFilestackoverflow",$.toJSON(selectedFile));
       navigate("/visualization");
+    }
+    else
+    {
+       alert('Please upload file')
     }
   };
 

@@ -257,198 +257,416 @@ document.getElementById("sliceZ").addEventListener("click", function(event) {
 });
 
 //arrowkey event
+
+// Step 1: Make slice boxes focusable and handle click to focus
+["sliceX", "sliceY", "sliceZ"].forEach(id => {
+    const element = document.getElementById(id);
+    element.tabIndex = 0;  // Make the element focusable
+    element.addEventListener("click", function() {
+        this.focus();  // Focus the element when clicked
+    });
+});
+
+// Step 2: Implement the keydown logic
+
+// For sliceX
 document.getElementById("sliceX").addEventListener("keydown", function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    // your existing sliceX keydown code here
+
+    console.log('key')
+    if(!isCrosshairFixed)
+    isCrosshairFixed = true;
   
-  console.log('key')
-  if(!isCrosshairFixed)
-  isCrosshairFixed = true;
-
-  const key = event.key;
-
-  switch(key){
-
-    case "ArrowLeft":      
-
-    volume.indexY--;
-    break;
-
-    case "ArrowRight":     
-
-    volume.indexY++;
-    break;
-
-    case "ArrowUp":      
-
-    volume.indexZ++;
-    break;  
-    
-    case "ArrowDown":
-
-    volume.indexZ--; 
-    break; 
-
-  }
-
-  const X_normalizedY = volume.indexY / volume.range[1];
-  const x = X_normalizedY * sliceX_width;
-  const X_normalizedZ = volume.indexZ / volume.range[2];
-  const y = X_normalizedZ * sliceX_height;
-
-  // set crosshair for other planes
-    //for plane Y
-
-    const Y_normalizedX =  volume.indexX / volume.range[0];
-    const Y_normalizedZ =  volume.indexZ / volume.range[2];
-
-    const Y_boxX = Y_normalizedX * sliceY_width;
-    const Y_boxZ = Y_normalizedZ * sliceY_height;
-    
-    //for plane Z
-
-    const Z_normalizedX =  volume.indexX / volume.range[0];
-    const Z_normalizedY =  volume.indexY / volume.range[1];
-
-    const Z_boxX = Z_normalizedX * sliceZ_width;
-    const Z_boxY = Z_normalizedY * sliceZ_height; 
-
-    // Update crosshair
-    updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
-
-    // Re-render slices
-    sliceY.render();
-    sliceZ.render();
-
+    const key = event.key;
+  
+    switch(key){
+  
+      case "ArrowLeft":      
+  
+      volume.indexY--;
+      break;
+  
+      case "ArrowRight":     
+  
+      volume.indexY++;
+      break;
+  
+      case "ArrowUp":      
+  
+      volume.indexZ++;
+      break;  
+      
+      case "ArrowDown":
+  
+      volume.indexZ--; 
+      break; 
+  
+    }
+  
+    const X_normalizedY = volume.indexY / volume.range[1];
+    const x = X_normalizedY * sliceX_width;
+    const X_normalizedZ = volume.indexZ / volume.range[2];
+    const y = X_normalizedZ * sliceX_height;
+  
+    // set crosshair for other planes
+      //for plane Y
+  
+      const Y_normalizedX =  volume.indexX / volume.range[0];
+      const Y_normalizedZ =  volume.indexZ / volume.range[2];
+  
+      const Y_boxX = Y_normalizedX * sliceY_width;
+      const Y_boxZ = Y_normalizedZ * sliceY_height;
+      
+      //for plane Z
+  
+      const Z_normalizedX =  volume.indexX / volume.range[0];
+      const Z_normalizedY =  volume.indexY / volume.range[1];
+  
+      const Z_boxX = Z_normalizedX * sliceZ_width;
+      const Z_boxY = Z_normalizedY * sliceZ_height; 
+  
+      // Update crosshair
+      updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
+  
+      // Re-render slices
+      sliceY.render();
+      sliceZ.render();
+  
 });
 
+// For sliceY
 document.getElementById("sliceY").addEventListener("keydown", function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    // your existing sliceY keydown code here
+
+    if(!isCrosshairFixed)
+    isCrosshairFixed = true;
   
-  if(!isCrosshairFixed)
-  isCrosshairFixed = true;
-
-  const key = event.key;
-
-  switch(key){
-
-    case "ArrowLeft":      
-
-    volume.indexX--;
-    break;
-
-    case "ArrowRight":     
-
-    volume.indexX++;
-    break;
-
-    case "ArrowUp":      
-
-    volume.indexZ++;
-    break;  
-    
-    case "ArrowDown":
-
-    volume.indexZ--; 
-    break; 
-
-  }
-
-  const Y_normalizedX = volume.indexX / volume.range[0];
-  const x = Y_normalizedX * sliceY_width;
-  const Y_normalizedZ = volume.indexZ / volume.range[2];
-  const y = Y_normalizedZ * sliceY_height;
-
-  // set crosshair for other planes
-    //for plane X
-
-    const X_normalizedY =  volume.indexY / volume.range[1];
-    const X_normalizedZ =  volume.indexZ / volume.range[2];
-
-    const X_boxY = X_normalizedY * sliceX_width;
-    const X_boxZ = X_normalizedZ * sliceX_height;
-    
-    //for plane Z
-
-    const Z_normalizedX =  volume.indexX / volume.range[0];
-    const Z_normalizedY =  volume.indexY / volume.range[1];
-
-    const Z_boxX = Z_normalizedX * sliceZ_width;
-    const Z_boxY = Z_normalizedY * sliceZ_height; 
-
-    // Update crosshair
-    updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
-
-    // Re-render slices
-    sliceX.render();
-    sliceZ.render();
-
+    const key = event.key;
+  
+    switch(key){
+  
+      case "ArrowLeft":      
+  
+      volume.indexX--;
+      break;
+  
+      case "ArrowRight":     
+  
+      volume.indexX++;
+      break;
+  
+      case "ArrowUp":      
+  
+      volume.indexZ++;
+      break;  
+      
+      case "ArrowDown":
+  
+      volume.indexZ--; 
+      break; 
+  
+    }
+  
+    const Y_normalizedX = volume.indexX / volume.range[0];
+    const x = Y_normalizedX * sliceY_width;
+    const Y_normalizedZ = volume.indexZ / volume.range[2];
+    const y = Y_normalizedZ * sliceY_height;
+  
+    // set crosshair for other planes
+      //for plane X
+  
+      const X_normalizedY =  volume.indexY / volume.range[1];
+      const X_normalizedZ =  volume.indexZ / volume.range[2];
+  
+      const X_boxY = X_normalizedY * sliceX_width;
+      const X_boxZ = X_normalizedZ * sliceX_height;
+      
+      //for plane Z
+  
+      const Z_normalizedX =  volume.indexX / volume.range[0];
+      const Z_normalizedY =  volume.indexY / volume.range[1];
+  
+      const Z_boxX = Z_normalizedX * sliceZ_width;
+      const Z_boxY = Z_normalizedY * sliceZ_height; 
+  
+      // Update crosshair
+      updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
+  
+      // Re-render slices
+      sliceX.render();
+      sliceZ.render();
 });
 
+// For sliceZ
 document.getElementById("sliceZ").addEventListener("keydown", function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    // your existing sliceZ keydown code here
+
+    if(!isCrosshairFixed)
+    isCrosshairFixed = true;
   
-  if(!isCrosshairFixed)
-  isCrosshairFixed = true;
-
-  const key = event.key;
-
-  switch(key){
-
-    case "ArrowLeft":      
-
-    volume.indexX--;
-    break;
-
-    case "ArrowRight":     
-
-    volume.indexX++;
-    break;
-
-    case "ArrowUp":      
-
-    volume.indexY++;
-    break;  
-    
-    case "ArrowDown":
-
-    volume.indexY--; 
-    break; 
-
-  }
-
-  const Z_normalizedX = volume.indexX / volume.range[0];
-  const x = Z_normalizedX * sliceZ_width;
-  const Z_normalizedY = volume.indexY / volume.range[1];
-  const y = Z_normalizedY * sliceZ_height;
-
-  // set crosshair for other planes
-    //for plane X
-
-    const X_normalizedY =  volume.indexY / volume.range[1];
-    const X_normalizedZ =  volume.indexZ / volume.range[2];
-
-    const X_boxY = X_normalizedY * sliceX_width;
-    const X_boxZ = X_normalizedZ * sliceX_height;
-    
-    //for plane Y
-
-    const Y_normalizedX =  volume.indexX / volume.range[0];
-    const Y_normalizedZ =  volume.indexZ / volume.range[2];
-
-    const Y_boxX = Y_normalizedX * sliceY_width;
-    const Y_boxZ = Y_normalizedZ * sliceY_height; 
-
-    // Update crosshair
-    updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-    updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);
-
-    // Re-render slices
-    sliceX.render();
-    sliceY.render();
-
+    const key = event.key;
+  
+    switch(key){
+  
+      case "ArrowLeft":      
+  
+      volume.indexX--;
+      break;
+  
+      case "ArrowRight":     
+  
+      volume.indexX++;
+      break;
+  
+      case "ArrowUp":      
+  
+      volume.indexY++;
+      break;  
+      
+      case "ArrowDown":
+  
+      volume.indexY--; 
+      break; 
+  
+    }
+  
+    const Z_normalizedX = volume.indexX / volume.range[0];
+    const x = Z_normalizedX * sliceZ_width;
+    const Z_normalizedY = volume.indexY / volume.range[1];
+    const y = Z_normalizedY * sliceZ_height;
+  
+    // set crosshair for other planes
+      //for plane X
+  
+      const X_normalizedY =  volume.indexY / volume.range[1];
+      const X_normalizedZ =  volume.indexZ / volume.range[2];
+  
+      const X_boxY = X_normalizedY * sliceX_width;
+      const X_boxZ = X_normalizedZ * sliceX_height;
+      
+      //for plane Y
+  
+      const Y_normalizedX =  volume.indexX / volume.range[0];
+      const Y_normalizedZ =  volume.indexZ / volume.range[2];
+  
+      const Y_boxX = Y_normalizedX * sliceY_width;
+      const Y_boxZ = Y_normalizedZ * sliceY_height; 
+  
+      // Update crosshair
+      updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+      updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);
+  
+      // Re-render slices
+      sliceX.render();
+      sliceY.render();
 });
+
+// Your other existing code can remain the same
+
+
+// document.getElementById("sliceX").addEventListener("keydown", function(event) {
+  
+//   console.log('key')
+//   if(!isCrosshairFixed)
+//   isCrosshairFixed = true;
+
+//   const key = event.key;
+
+//   switch(key){
+
+//     case "ArrowLeft":      
+
+//     volume.indexY--;
+//     break;
+
+//     case "ArrowRight":     
+
+//     volume.indexY++;
+//     break;
+
+//     case "ArrowUp":      
+
+//     volume.indexZ++;
+//     break;  
+    
+//     case "ArrowDown":
+
+//     volume.indexZ--; 
+//     break; 
+
+//   }
+
+//   const X_normalizedY = volume.indexY / volume.range[1];
+//   const x = X_normalizedY * sliceX_width;
+//   const X_normalizedZ = volume.indexZ / volume.range[2];
+//   const y = X_normalizedZ * sliceX_height;
+
+//   // set crosshair for other planes
+//     //for plane Y
+
+//     const Y_normalizedX =  volume.indexX / volume.range[0];
+//     const Y_normalizedZ =  volume.indexZ / volume.range[2];
+
+//     const Y_boxX = Y_normalizedX * sliceY_width;
+//     const Y_boxZ = Y_normalizedZ * sliceY_height;
+    
+//     //for plane Z
+
+//     const Z_normalizedX =  volume.indexX / volume.range[0];
+//     const Z_normalizedY =  volume.indexY / volume.range[1];
+
+//     const Z_boxX = Z_normalizedX * sliceZ_width;
+//     const Z_boxY = Z_normalizedY * sliceZ_height; 
+
+//     // Update crosshair
+//     updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
+
+//     // Re-render slices
+//     sliceY.render();
+//     sliceZ.render();
+
+// });
+
+// document.getElementById("sliceY").addEventListener("keydown", function(event) {
+  
+//   if(!isCrosshairFixed)
+//   isCrosshairFixed = true;
+
+//   const key = event.key;
+
+//   switch(key){
+
+//     case "ArrowLeft":      
+
+//     volume.indexX--;
+//     break;
+
+//     case "ArrowRight":     
+
+//     volume.indexX++;
+//     break;
+
+//     case "ArrowUp":      
+
+//     volume.indexZ++;
+//     break;  
+    
+//     case "ArrowDown":
+
+//     volume.indexZ--; 
+//     break; 
+
+//   }
+
+//   const Y_normalizedX = volume.indexX / volume.range[0];
+//   const x = Y_normalizedX * sliceY_width;
+//   const Y_normalizedZ = volume.indexZ / volume.range[2];
+//   const y = Y_normalizedZ * sliceY_height;
+
+//   // set crosshair for other planes
+//     //for plane X
+
+//     const X_normalizedY =  volume.indexY / volume.range[1];
+//     const X_normalizedZ =  volume.indexZ / volume.range[2];
+
+//     const X_boxY = X_normalizedY * sliceX_width;
+//     const X_boxZ = X_normalizedZ * sliceX_height;
+    
+//     //for plane Z
+
+//     const Z_normalizedX =  volume.indexX / volume.range[0];
+//     const Z_normalizedY =  volume.indexY / volume.range[1];
+
+//     const Z_boxX = Z_normalizedX * sliceZ_width;
+//     const Z_boxY = Z_normalizedY * sliceZ_height; 
+
+//     // Update crosshair
+//     updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
+
+//     // Re-render slices
+//     sliceX.render();
+//     sliceZ.render();
+
+// });
+
+// document.getElementById("sliceZ").addEventListener("keydown", function(event) {
+  
+//   if(!isCrosshairFixed)
+//   isCrosshairFixed = true;
+
+//   const key = event.key;
+
+//   switch(key){
+
+//     case "ArrowLeft":      
+
+//     volume.indexX--;
+//     break;
+
+//     case "ArrowRight":     
+
+//     volume.indexX++;
+//     break;
+
+//     case "ArrowUp":      
+
+//     volume.indexY++;
+//     break;  
+    
+//     case "ArrowDown":
+
+//     volume.indexY--; 
+//     break; 
+
+//   }
+
+//   const Z_normalizedX = volume.indexX / volume.range[0];
+//   const x = Z_normalizedX * sliceZ_width;
+//   const Z_normalizedY = volume.indexY / volume.range[1];
+//   const y = Z_normalizedY * sliceZ_height;
+
+//   // set crosshair for other planes
+//     //for plane X
+
+//     const X_normalizedY =  volume.indexY / volume.range[1];
+//     const X_normalizedZ =  volume.indexZ / volume.range[2];
+
+//     const X_boxY = X_normalizedY * sliceX_width;
+//     const X_boxZ = X_normalizedZ * sliceX_height;
+    
+//     //for plane Y
+
+//     const Y_normalizedX =  volume.indexX / volume.range[0];
+//     const Y_normalizedZ =  volume.indexZ / volume.range[2];
+
+//     const Y_boxX = Y_normalizedX * sliceY_width;
+//     const Y_boxZ = Y_normalizedZ * sliceY_height; 
+
+//     // Update crosshair
+//     updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
+//     updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);
+
+//     // Re-render slices
+//     sliceX.render();
+//     sliceY.render();
+
+// });
 
 
 // Adding mousemove event listener to sliceX container
