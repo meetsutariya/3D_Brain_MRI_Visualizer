@@ -4,11 +4,19 @@ import { useNavigate } from "react-router-dom";
 
 
 const FileUploader = ({ setUploadedFile }) => {
-
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
 
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+      // console.log(e);
+    }
+  };
+
   const handleChange = (e) => {
-    const selectedFile = e.target.files[0];
+    // const selectedFile = e.target.files[0];
+    const selectedFile = file;
 
     if (selectedFile) {
       setUploadedFile(selectedFile);
@@ -62,8 +70,26 @@ const FileUploader = ({ setUploadedFile }) => {
         <div className="drag-file-area">
           <span className="material-icons-outlined upload-icon"> file_upload </span>
           <h3 className="dynamic-message"> Drag & drop any file here </h3>
-          <label className="label"> or <span className="browse-files"> <input type="file" className="default-file-input" onChange={handleChange}/> <span className="browse-files-text">browse file</span> <span>from device</span> </span> </label>
+          <label className="label"> 
+              <span className="browse-files"> 
+                <input type="file" className="default-file-input" onChange={handleFileChange}/> 
+                  <span className="browse-files-text">
+                    Select file
+                  </span> 
+                {/* <span>
+                  from device
+                </span>  */}
+              </span> 
+          </label>
         </div>
+        {file && (
+        <section>
+          File details:
+          <ul>
+            <li>Name: {file.name}</li>
+          </ul>
+        </section>
+      )}
         <span className="cannot-upload-message"> <span className="material-icons-outlined">error</span> Please select a file first <span className="material-icons-outlined cancel-alert-button">cancel</span> </span>
         <div className="file-block">
           <div className="file-info"> <span className="material-icons-outlined file-icon">description</span> <span className="file-name"> </span> | <span className="file-size">  </span> </div>
@@ -73,8 +99,6 @@ const FileUploader = ({ setUploadedFile }) => {
         <button type="button" className="upload-button" onClick={handleChange}> Upload </button>
       </div>
   </form>
-
-  
   );
 };
 
