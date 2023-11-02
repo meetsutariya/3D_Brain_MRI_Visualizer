@@ -100,6 +100,11 @@ html, body {
 	  z-index: -1;
 	  text-decoration: none;
   }
+  .alert {
+	font-weight: bold;
+	color: #BB0000;
+	font-size: 20px;
+  }
   .cannot-upload-message {
 	  background-color: #ffc6c4;
 	  font-size: 17px;
