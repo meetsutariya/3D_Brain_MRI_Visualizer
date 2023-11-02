@@ -295,19 +295,20 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
   
       case "ArrowUp":      
   
-      volume.indexZ++;
+      volume.indexZ--;
       break;  
       
       case "ArrowDown":
   
-      volume.indexZ--; 
+      volume.indexZ++; 
       break; 
   
     }
   
     const X_normalizedY = volume.indexY / volume.range[1];
-    const x = X_normalizedY * sliceX_width;
     const X_normalizedZ = volume.indexZ / volume.range[2];
+
+    const x = X_normalizedY * sliceX_width;
     const y = X_normalizedZ * sliceX_height;
   
     // set crosshair for other planes
@@ -363,19 +364,20 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
   
       case "ArrowUp":      
   
-      volume.indexZ++;
+      volume.indexZ--;
       break;  
       
       case "ArrowDown":
   
-      volume.indexZ--; 
+      volume.indexZ++; 
       break; 
   
     }
   
     const Y_normalizedX = volume.indexX / volume.range[0];
-    const x = Y_normalizedX * sliceY_width;
     const Y_normalizedZ = volume.indexZ / volume.range[2];
+
+    const x = Y_normalizedX * sliceY_width;
     const y = Y_normalizedZ * sliceY_height;
   
     // set crosshair for other planes
@@ -430,19 +432,20 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
   
       case "ArrowUp":      
   
-      volume.indexY++;
+      volume.indexY--;
       break;  
       
       case "ArrowDown":
   
-      volume.indexY--; 
+      volume.indexY++; 
       break; 
   
     }
   
     const Z_normalizedX = volume.indexX / volume.range[0];
-    const x = Z_normalizedX * sliceZ_width;
     const Z_normalizedY = volume.indexY / volume.range[1];
+    
+    const x = Z_normalizedX * sliceZ_width;
     const y = Z_normalizedY * sliceZ_height;
   
     // set crosshair for other planes
