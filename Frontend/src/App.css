@@ -10,7 +10,7 @@ html, body {
   /* Container for 3D and Slices */
   .container1 {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	height: 100vh; /* Full viewport height */
   }
   
@@ -18,6 +18,9 @@ html, body {
   #threeD{
 	flex-grow: 3; /* Takes 40% of the available height */
 	background-color: #000;
+	border: #005af5;
+	border-style: solid;
+	border-width: 2px;
   }
   
   /* Container for Slices */
@@ -26,14 +29,34 @@ html, body {
 	display: flex;
 	flex-direction: row;
   }
+
+  .last-container {
+	/* flex-grow: 3; Takes 60% of the available height */
+	width: 33%;
+	display: flex;
+	flex-direction: column;
+  }
   
   /* Individual Slices */
-  #sliceX, #sliceY, #sliceZ {
-	flex-grow: 1;
+  #sliceX, #sliceY {
+	/* flex-grow: 2; */
+	padding: 20px;
 	position: relative;
-	width: 32%;
+	width: 50%;
 	align-content: center;
 	background-color: #000;
+	border: #07f807;
+	border-style: solid;
+	border-width: 2px;
+  }
+
+  #sliceZ{
+	/* flex-grow: 7; */
+	position: relative;
+	height: 50%;
+	border: #f7fff7;
+	border-style: solid;
+	border-width: 2px;
   }
   
   
