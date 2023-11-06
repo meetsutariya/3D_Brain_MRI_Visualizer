@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { initialize, updateCrosshair, reqVar} from "./main";
+import { initialize, setPoint } from "./main";
 import Sidebar from './Sidebar';
 
 // export default function Visualization() {
@@ -23,9 +23,11 @@ const Visualization = ({ uploadedFile }) => {
 
     const handleEnter = (coordinates) => {
         const { x, y, z } = coordinates;
-        updateCrosshair("sliceX", x, y, z);
-        updateCrosshair("sliceY", x, y, z);
-        updateCrosshair("sliceZ", x, y, z);
+
+        console.log(x, y, z)
+
+        setPoint(x,y,z);
+
       }
 
       const toggleSidebar = () => {
@@ -36,14 +38,9 @@ const Visualization = ({ uploadedFile }) => {
 
         <div className="container1">
         {/* <h1>Visualization Page</h1> */}
-        <button onClick={toggleSidebar}>
-            {/* You can replace this with an actual icon */}
-            ☰
-            </button>
-            { sidebarVisible && <Sidebar onEnter={handleEnter} /> }
+
+        <Sidebar onEnter={handleEnter} /> 
         <div id="sliceX"></div>
-        
-        
         
         <div className="last-container">
         <div id="threeD"></div>
