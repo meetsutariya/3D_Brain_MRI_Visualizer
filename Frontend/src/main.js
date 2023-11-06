@@ -3,6 +3,7 @@
 
 let gui;
 let isCrosshairFixed = false;
+export let reqVar = {sliceX_width:0, sliceX_height:0, sliceY_width:0, sliceY_height:0, sliceZ_width:0, sliceZ_height:0, IndexX:0, IndexY:0, IndexZ:0};
 
 
 export function destroyGUI() {
@@ -12,7 +13,7 @@ export function destroyGUI() {
   }
 }
 
-function updateCrosshair(containerId, x, y, x_, y_, z_) {
+export function updateCrosshair(containerId, x, y, x_, y_, z_) {
     const svgNamespace = "http://www.w3.org/2000/svg";
   
     let svg = document.getElementById(containerId + "-svg");
@@ -112,12 +113,12 @@ export async function initialize(niiFile) {
         sliceZ.orientation = 'Z';
         sliceZ.init();
 
-        const sliceX_width = document.getElementById("sliceX").offsetWidth;
-        const sliceX_height = document.getElementById("sliceX").offsetHeight;
-        const sliceY_width = document.getElementById("sliceY").offsetWidth;
-        const sliceY_height = document.getElementById("sliceY").offsetHeight;
-        const sliceZ_width = document.getElementById("sliceZ").offsetWidth;
-        const sliceZ_height = document.getElementById("sliceZ").offsetHeight;
+        reqVar.sliceX_width = document.getElementById("sliceX").offsetWidth;
+        reqVar.sliceX_height = document.getElementById("sliceX").offsetHeight;
+        reqVar.sliceY_width = document.getElementById("sliceY").offsetWidth;
+        reqVar.sliceY_height = document.getElementById("sliceY").offsetHeight;
+        reqVar.sliceZ_width = document.getElementById("sliceZ").offsetWidth;
+        reqVar.sliceZ_height = document.getElementById("sliceZ").offsetHeight;
 
 
         //
@@ -178,6 +179,8 @@ export async function initialize(niiFile) {
 
 
 
+
+
         //
         // THE GUI
         //
@@ -197,6 +200,10 @@ export async function initialize(niiFile) {
                 threeD.add(volume);
                 threeD.render();
             }
+
+            reqVar.IndexX = volume.indexX;
+            reqVar.IndexY = volume.indexY;
+            reqVar.IndexZ = volume.indexZ;
 
             // console.log(gui)
 
@@ -308,8 +315,8 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
     const X_normalizedY = volume.indexY / volume.range[1];
     const X_normalizedZ = volume.indexZ / volume.range[2];
 
-    const x = X_normalizedY * sliceX_width;
-    const y = X_normalizedZ * sliceX_height;
+    const x = X_normalizedY * reqVar.sliceX_width;
+    const y = X_normalizedZ * reqVar.sliceX_height;
   
     // set crosshair for other planes
       //for plane Y
@@ -317,16 +324,16 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
       const Y_normalizedX =  volume.indexX / volume.range[0];
       const Y_normalizedZ =  volume.indexZ / volume.range[2];
   
-      const Y_boxX = Y_normalizedX * sliceY_width;
-      const Y_boxZ = Y_normalizedZ * sliceY_height;
+      const Y_boxX = Y_normalizedX * reqVar.sliceY_width;
+      const Y_boxZ = Y_normalizedZ * reqVar.sliceY_height;
       
       //for plane Z
   
       const Z_normalizedX =  volume.indexX / volume.range[0];
       const Z_normalizedY =  volume.indexY / volume.range[1];
   
-      const Z_boxX = Z_normalizedX * sliceZ_width;
-      const Z_boxY = Z_normalizedY * sliceZ_height; 
+      const Z_boxX = Z_normalizedX * reqVar.sliceZ_width;
+      const Z_boxY = Z_normalizedY * reqVar.sliceZ_height; 
   
       // Update crosshair
       updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
@@ -377,8 +384,8 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
     const Y_normalizedX = volume.indexX / volume.range[0];
     const Y_normalizedZ = volume.indexZ / volume.range[2];
 
-    const x = Y_normalizedX * sliceY_width;
-    const y = Y_normalizedZ * sliceY_height;
+    const x = Y_normalizedX * reqVar.sliceY_width;
+    const y = Y_normalizedZ * reqVar.sliceY_height;
   
     // set crosshair for other planes
       //for plane X
@@ -386,16 +393,16 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
       const X_normalizedY =  volume.indexY / volume.range[1];
       const X_normalizedZ =  volume.indexZ / volume.range[2];
   
-      const X_boxY = X_normalizedY * sliceX_width;
-      const X_boxZ = X_normalizedZ * sliceX_height;
+      const X_boxY = X_normalizedY * reqVar.sliceX_width;
+      const X_boxZ = X_normalizedZ * reqVar.sliceX_height;
       
       //for plane Z
   
       const Z_normalizedX =  volume.indexX / volume.range[0];
       const Z_normalizedY =  volume.indexY / volume.range[1];
   
-      const Z_boxX = Z_normalizedX * sliceZ_width;
-      const Z_boxY = Z_normalizedY * sliceZ_height; 
+      const Z_boxX = Z_normalizedX * reqVar.sliceZ_width;
+      const Z_boxY = Z_normalizedY * reqVar.sliceZ_height; 
   
       // Update crosshair
       updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
@@ -445,8 +452,8 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
     const Z_normalizedX = volume.indexX / volume.range[0];
     const Z_normalizedY = volume.indexY / volume.range[1];
     
-    const x = Z_normalizedX * sliceZ_width;
-    const y = Z_normalizedY * sliceZ_height;
+    const x = Z_normalizedX * reqVar.sliceZ_width;
+    const y = Z_normalizedY * reqVar.sliceZ_height;
   
     // set crosshair for other planes
       //for plane X
@@ -454,16 +461,16 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
       const X_normalizedY =  volume.indexY / volume.range[1];
       const X_normalizedZ =  volume.indexZ / volume.range[2];
   
-      const X_boxY = X_normalizedY * sliceX_width;
-      const X_boxZ = X_normalizedZ * sliceX_height;
+      const X_boxY = X_normalizedY * reqVar.sliceX_width;
+      const X_boxZ = X_normalizedZ * reqVar.sliceX_height;
       
       //for plane Y
   
       const Y_normalizedX =  volume.indexX / volume.range[0];
       const Y_normalizedZ =  volume.indexZ / volume.range[2];
   
-      const Y_boxX = Y_normalizedX * sliceY_width;
-      const Y_boxZ = Y_normalizedZ * sliceY_height; 
+      const Y_boxX = Y_normalizedX * reqVar.sliceY_width;
+      const Y_boxZ = Y_normalizedZ * reqVar.sliceY_height; 
   
       // Update crosshair
       updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
@@ -474,203 +481,6 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
       sliceX.render();
       sliceY.render();
 });
-
-// Your other existing code can remain the same
-
-
-// document.getElementById("sliceX").addEventListener("keydown", function(event) {
-  
-//   console.log('key')
-//   if(!isCrosshairFixed)
-//   isCrosshairFixed = true;
-
-//   const key = event.key;
-
-//   switch(key){
-
-//     case "ArrowLeft":      
-
-//     volume.indexY--;
-//     break;
-
-//     case "ArrowRight":     
-
-//     volume.indexY++;
-//     break;
-
-//     case "ArrowUp":      
-
-//     volume.indexZ++;
-//     break;  
-    
-//     case "ArrowDown":
-
-//     volume.indexZ--; 
-//     break; 
-
-//   }
-
-//   const X_normalizedY = volume.indexY / volume.range[1];
-//   const x = X_normalizedY * sliceX_width;
-//   const X_normalizedZ = volume.indexZ / volume.range[2];
-//   const y = X_normalizedZ * sliceX_height;
-
-//   // set crosshair for other planes
-//     //for plane Y
-
-//     const Y_normalizedX =  volume.indexX / volume.range[0];
-//     const Y_normalizedZ =  volume.indexZ / volume.range[2];
-
-//     const Y_boxX = Y_normalizedX * sliceY_width;
-//     const Y_boxZ = Y_normalizedZ * sliceY_height;
-    
-//     //for plane Z
-
-//     const Z_normalizedX =  volume.indexX / volume.range[0];
-//     const Z_normalizedY =  volume.indexY / volume.range[1];
-
-//     const Z_boxX = Z_normalizedX * sliceZ_width;
-//     const Z_boxY = Z_normalizedY * sliceZ_height; 
-
-//     // Update crosshair
-//     updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
-
-//     // Re-render slices
-//     sliceY.render();
-//     sliceZ.render();
-
-// });
-
-// document.getElementById("sliceY").addEventListener("keydown", function(event) {
-  
-//   if(!isCrosshairFixed)
-//   isCrosshairFixed = true;
-
-//   const key = event.key;
-
-//   switch(key){
-
-//     case "ArrowLeft":      
-
-//     volume.indexX--;
-//     break;
-
-//     case "ArrowRight":     
-
-//     volume.indexX++;
-//     break;
-
-//     case "ArrowUp":      
-
-//     volume.indexZ++;
-//     break;  
-    
-//     case "ArrowDown":
-
-//     volume.indexZ--; 
-//     break; 
-
-//   }
-
-//   const Y_normalizedX = volume.indexX / volume.range[0];
-//   const x = Y_normalizedX * sliceY_width;
-//   const Y_normalizedZ = volume.indexZ / volume.range[2];
-//   const y = Y_normalizedZ * sliceY_height;
-
-//   // set crosshair for other planes
-//     //for plane X
-
-//     const X_normalizedY =  volume.indexY / volume.range[1];
-//     const X_normalizedZ =  volume.indexZ / volume.range[2];
-
-//     const X_boxY = X_normalizedY * sliceX_width;
-//     const X_boxZ = X_normalizedZ * sliceX_height;
-    
-//     //for plane Z
-
-//     const Z_normalizedX =  volume.indexX / volume.range[0];
-//     const Z_normalizedY =  volume.indexY / volume.range[1];
-
-//     const Z_boxX = Z_normalizedX * sliceZ_width;
-//     const Z_boxY = Z_normalizedY * sliceZ_height; 
-
-//     // Update crosshair
-//     updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceZ", Z_boxX, Z_boxY, volume.indexX, volume.indexY, volume.indexZ);
-
-//     // Re-render slices
-//     sliceX.render();
-//     sliceZ.render();
-
-// });
-
-// document.getElementById("sliceZ").addEventListener("keydown", function(event) {
-  
-//   if(!isCrosshairFixed)
-//   isCrosshairFixed = true;
-
-//   const key = event.key;
-
-//   switch(key){
-
-//     case "ArrowLeft":      
-
-//     volume.indexX--;
-//     break;
-
-//     case "ArrowRight":     
-
-//     volume.indexX++;
-//     break;
-
-//     case "ArrowUp":      
-
-//     volume.indexY++;
-//     break;  
-    
-//     case "ArrowDown":
-
-//     volume.indexY--; 
-//     break; 
-
-//   }
-
-//   const Z_normalizedX = volume.indexX / volume.range[0];
-//   const x = Z_normalizedX * sliceZ_width;
-//   const Z_normalizedY = volume.indexY / volume.range[1];
-//   const y = Z_normalizedY * sliceZ_height;
-
-//   // set crosshair for other planes
-//     //for plane X
-
-//     const X_normalizedY =  volume.indexY / volume.range[1];
-//     const X_normalizedZ =  volume.indexZ / volume.range[2];
-
-//     const X_boxY = X_normalizedY * sliceX_width;
-//     const X_boxZ = X_normalizedZ * sliceX_height;
-    
-//     //for plane Y
-
-//     const Y_normalizedX =  volume.indexX / volume.range[0];
-//     const Y_normalizedZ =  volume.indexZ / volume.range[2];
-
-//     const Y_boxX = Y_normalizedX * sliceY_width;
-//     const Y_boxZ = Y_normalizedZ * sliceY_height; 
-
-//     // Update crosshair
-//     updateCrosshair("sliceX", X_boxY, X_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceY", Y_boxX, Y_boxZ, volume.indexX, volume.indexY, volume.indexZ);
-//     updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);
-
-//     // Re-render slices
-//     sliceX.render();
-//     sliceY.render();
-
-// });
-
 
 // Adding mousemove event listener to sliceX container
 document.getElementById("sliceX").addEventListener("mousemove", function (event) {
@@ -683,8 +493,8 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     const y = event.clientY - rect.top;  // y position within the element.
 
     // Normalize these coordinates and map them to the volume dimensions
-    const normalizedX = x / sliceX_width;
-    const normalizedY = y / sliceX_height;
+    const normalizedX = x / reqVar.sliceX_width;
+    const normalizedY = y / reqVar.sliceX_height;
 
     const newSliceY = Math.floor(normalizedX * volume.range[1]);
     const newSliceZ = Math.floor(normalizedY * volume.range[2]);
@@ -700,16 +510,16 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     const Y_normalizedX =  volume.indexX / volume.range[0];
     const Y_normalizedZ =  volume.indexZ / volume.range[2];
 
-    const Y_boxX = Y_normalizedX * sliceY_width;
-    const Y_boxZ = Y_normalizedZ * sliceY_height;
+    const Y_boxX = Y_normalizedX * reqVar.sliceY_width;
+    const Y_boxZ = Y_normalizedZ * reqVar.sliceY_height;
     
     //for plane Z
 
     const Z_normalizedX =  volume.indexX / volume.range[0];
     const Z_normalizedY =  volume.indexY / volume.range[1];
 
-    const Z_boxX = Z_normalizedX * sliceZ_width;
-    const Z_boxY = Z_normalizedY * sliceZ_height;
+    const Z_boxX = Z_normalizedX * reqVar.sliceZ_width;
+    const Z_boxY = Z_normalizedY * reqVar.sliceZ_height;
 
     // Update crosshair
     updateCrosshair("sliceX", x, y, volume.indexX, volume.indexY, volume.indexZ);
@@ -732,8 +542,8 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     const y = event.clientY - rect.top;  // y position within the element.
 
     // Normalize these coordinates and map them to the volume dimensions
-    const normalizedX = x / sliceY_width;
-    const normalizedY = y / sliceY_height;
+    const normalizedX = x / reqVar.sliceY_width;
+    const normalizedY = y / reqVar.sliceY_height;
 
     const newSliceX = Math.floor(normalizedX * volume.range[0]);
     const newSliceZ = Math.floor(normalizedY * volume.range[2]);
@@ -749,16 +559,16 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     const X_normalizedY =  volume.indexY / volume.range[1];
     const X_normalizedZ =  volume.indexZ / volume.range[2];
 
-    const X_boxY = X_normalizedY * sliceX_width;
-    const X_boxZ = X_normalizedZ * sliceX_height;
+    const X_boxY = X_normalizedY * reqVar.sliceX_width;
+    const X_boxZ = X_normalizedZ * reqVar.sliceX_height;
     
     //for plane Z
 
     const Z_normalizedX =  volume.indexX / volume.range[0];
     const Z_normalizedY =  volume.indexY / volume.range[1];
 
-    const Z_boxX = Z_normalizedX * sliceZ_width;
-    const Z_boxY = Z_normalizedY * sliceZ_height;
+    const Z_boxX = Z_normalizedX * reqVar.sliceZ_width;
+    const Z_boxY = Z_normalizedY * reqVar.sliceZ_height;
 
     // Update crosshair
     updateCrosshair("sliceY", x, y, volume.indexX, volume.indexY, volume.indexZ);
@@ -798,16 +608,16 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     const X_normalizedY =  volume.indexY / volume.range[1];
     const X_normalizedZ =  volume.indexZ / volume.range[2];
 
-    const X_boxY = X_normalizedY * sliceX_width;
-    const X_boxZ = X_normalizedZ * sliceX_height;
+    const X_boxY = X_normalizedY * reqVar.sliceX_width;
+    const X_boxZ = X_normalizedZ * reqVar.sliceX_height;
     
     //for plane Y
 
     const Y_normalizedX =  volume.indexX / volume.range[0];
     const Y_normalizedZ =  volume.indexZ / volume.range[2];
 
-    const Y_boxX = Y_normalizedX * sliceY_width;
-    const Y_boxZ = Y_normalizedZ * sliceY_height;
+    const Y_boxX = Y_normalizedX * reqVar.sliceY_width;
+    const Y_boxZ = Y_normalizedZ * reqVar.sliceY_height;
 
     // Update crosshair
     updateCrosshair("sliceZ", x, y, volume.indexX, volume.indexY, volume.indexZ);

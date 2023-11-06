@@ -1,5 +1,5 @@
-import React, { useLayoutEffect } from "react";
-import { initialize, updateCrosshair} from "./main";
+import React, { useLayoutEffect, useState } from "react";
+import { initialize, updateCrosshair, reqVar} from "./main";
 import Sidebar from './Sidebar';
 
 // export default function Visualization() {
