@@ -1,10 +1,12 @@
 /* global X */
 /* global dat */
 
+import { useEffect } from "react";
+
 let gui;
 let isCrosshairFixed = false;
 let threeD, volume, sliceX, sliceY, sliceZ;
-let sliceX_width, sliceX_height, sliceY_width, sliceY_height, sliceZ_width, sliceZ_height;
+let sliceX_width, sliceX_height, sliceY_width, sliceY_height, sliceZ_width, sliceZ_height, IndexX, IndexY, IndexZ;
 
 
 export function destroyGUI() {
@@ -201,6 +203,10 @@ export async function initialize(niiFile) {
                 threeD.render();
             }
 
+            IndexX = volume.indexX;
+            IndexY = volume.indexY;
+            IndexZ = volume.indexZ;
+
             // console.log(gui)
 
             // now the real GUI
@@ -342,6 +348,10 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
       // Re-render slices
       sliceY.render();
       sliceZ.render();
+
+      IndexX = volume.indexX;
+      IndexY = volume.indexY;
+      IndexZ = volume.indexZ;
   
 });
 
@@ -414,6 +424,10 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
       // Re-render slices
       sliceX.render();
       sliceZ.render();
+
+      IndexX = volume.indexX;
+      IndexY = volume.indexY;
+      IndexZ = volume.indexZ;
 });
 
 // For sliceZ
@@ -486,6 +500,10 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
       // Re-render slices
       sliceX.render();
       sliceY.render();
+
+      IndexX = volume.indexX;
+      IndexY = volume.indexY;
+      IndexZ = volume.indexZ;
 });
 
 // Adding mousemove event listener to sliceX container
@@ -536,6 +554,10 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     sliceY.render();
     sliceZ.render();
 
+    IndexX = volume.indexX;
+    IndexY = volume.indexY;
+    IndexZ = volume.indexZ;
+
         });
 // Adding mousemove event listener to sliceY container
 document.getElementById("sliceY").addEventListener("mousemove", function (event) {
@@ -584,6 +606,10 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     // Re-render slices
     sliceX.render();
     sliceZ.render();
+
+    IndexX = volume.indexX;
+    IndexY = volume.indexY;
+    IndexZ = volume.indexZ;
 
         });
 // Adding mousemove event listener to sliceX container
@@ -634,6 +660,10 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     // Re-render slices
     sliceX.render();
     sliceY.render();
+
+    IndexX = volume.indexX;
+    IndexY = volume.indexY;
+    IndexZ = volume.indexZ;
 
         });
 
@@ -693,6 +723,16 @@ export function setPoint(InX, InY, InZ){
     sliceX.render();
     sliceY.render();
     sliceZ.render();
+
+    IndexX = volume.indexX;
+    IndexY = volume.indexY;
+    IndexZ = volume.indexZ;
+
+}
+
+export function addPoint(){
+
+    return ({'x':IndexX,'y': IndexY,'z': IndexZ})
 
 }
 

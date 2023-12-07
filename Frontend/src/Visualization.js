@@ -1,11 +1,9 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import { initialize, setPoint } from "./main";
 import Sidebar from './Sidebar';
 
 // export default function Visualization() {
 const Visualization = ({ uploadedFile }) => {
-
-    const [sidebarVisible, setSidebarVisible] = useState(false);
 
     useLayoutEffect(() => {
 
@@ -30,10 +28,6 @@ const Visualization = ({ uploadedFile }) => {
 
       }
 
-      const toggleSidebar = () => {
-        setSidebarVisible(!sidebarVisible);
-      }
-
     return (
 
         <div className="container1">
@@ -48,7 +42,7 @@ const Visualization = ({ uploadedFile }) => {
         </div>
 
         <div id="sliceY"></div>
-    </div>
+        </div>
 
     );
 }

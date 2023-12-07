@@ -16,7 +16,7 @@ html, body {
   
   /* 3D Box */
   #threeD{
-	flex-grow: 3; /* Takes 40% of the available height */
+	flex-grow: 3; /* Takes 30% of the available height */
 	background-color: #000;
 	border: #005af5;
 	border-style: solid;
@@ -25,7 +25,7 @@ html, body {
   
   /* Container for Slices */
   .slice-container {
-	flex-grow: 7; /* Takes 60% of the available height */
+	flex-grow: 7; /* Takes 70% of the available height */
 	display: flex;
 	flex-direction: row;
   }
@@ -58,8 +58,7 @@ html, body {
 	border-style: solid;
 	border-width: 2px;
   }
-  
-  
+
   
   h1 {
 	font-size: 24px;
@@ -201,4 +200,52 @@ html, body {
 	  margin: 10px;
 	  padding: 7.5px 50px;
 	  cursor: pointer;
+  }
+
+  .coordinate-box {
+	border: 1px solid white;
+	padding: 10px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+  }
+  
+  .coordinate-edit {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+  }
+  
+  .coordinate-display {
+	display: flex;
+	flex-direction: column;
+  }
+  
+  .coordinate-values {
+	margin-bottom: 10px;
+	color: white;
+  }
+  
+  .coordinate-buttons button {
+	margin-right: 10px;
+  }
+
+  .sidebar {
+	max-height: 100vh; /* Adjust the max-height as per your layout */
+	overflow-y: auto; /* Enables vertical scrolling */
+	padding: 10px;
+	border-right: 1px solid #ddd; /* Just for better visibility */
+	/* Other styles for your sidebar */
+  }
+
+  /* Add this to your CSS file */
+.sidebar-button {
+	/* Button styling */
+	background-color: #444; /* Default background */
+	color: white; /* Default text color */
+	/* Other styles like padding, border, etc. */
+  }
+  
+  .sidebar-button:hover {
+	background-color: #666; /* Background on hover */
+	color: #ddd; /* Text color on hover */
   }
