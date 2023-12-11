@@ -210,35 +210,35 @@ export async function initialize(niiFile) {
             // console.log(gui)
 
             // now the real GUI
-            // gui = new dat.GUI();
-            // console.log(gui)
+            gui = new dat.GUI();
+            console.log(gui)
 
 
-            // // the following configures the gui for interacting with the X.volume
-            // var volumegui = gui.addFolder('Volume');
-            // // now we can configure controllers which..
-            // // .. switch between slicing and volume rendering
-            // var vrController = volumegui.add(volume, 'volumeRendering');
-            // // .. configure the volume rendering opacity
-            // var opacityController = volumegui.add(volume, 'opacity', 0, 1);
-            // // .. and the threshold in the min..max range
-            // var lowerThresholdController = volumegui.add(volume, 'lowerThreshold',
-            //     volume.min, volume.max);
-            // var upperThresholdController = volumegui.add(volume, 'upperThreshold',
-            //     volume.min, volume.max);
-            // var lowerWindowController = volumegui.add(volume, 'windowLow', volume.min,
-            //     volume.max);
-            // var upperWindowController = volumegui.add(volume, 'windowHigh', volume.min,
-            //     volume.max);
-            // // the indexX,Y,Z are the currently displayed slice indices in the range
-            // // 0..dimensions-1
-            // var sliceXController = volumegui.add(volume, 'indexX', 0,
-            //     volume.range[0] - 1);
-            // var sliceYController = volumegui.add(volume, 'indexY', 0,
-            //     volume.range[1] - 1);
-            // var sliceZController = volumegui.add(volume, 'indexZ', 0,
-            //     volume.range[2] - 1);
-            // volumegui.open();
+            // the following configures the gui for interacting with the X.volume
+            var volumegui = gui.addFolder('Volume');
+            // now we can configure controllers which..
+            // .. switch between slicing and volume rendering
+            var vrController = volumegui.add(volume, 'volumeRendering');
+            // .. configure the volume rendering opacity
+            var opacityController = volumegui.add(volume, 'opacity', 0, 1);
+            // .. and the threshold in the min..max range
+            var lowerThresholdController = volumegui.add(volume, 'lowerThreshold',
+                volume.min, volume.max);
+            var upperThresholdController = volumegui.add(volume, 'upperThreshold',
+                volume.min, volume.max);
+            var lowerWindowController = volumegui.add(volume, 'windowLow', volume.min,
+                volume.max);
+            var upperWindowController = volumegui.add(volume, 'windowHigh', volume.min,
+                volume.max);
+            // the indexX,Y,Z are the currently displayed slice indices in the range
+            // 0..dimensions-1
+            var sliceXController = volumegui.add(volume, 'indexX', 0,
+                volume.range[0] - 1);
+            var sliceYController = volumegui.add(volume, 'indexY', 0,
+                volume.range[1] - 1);
+            var sliceZController = volumegui.add(volume, 'indexZ', 0,
+                volume.range[2] - 1);
+            volumegui.open();
 
 //click event
 
