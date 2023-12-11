@@ -1,8 +1,6 @@
 /* global X */
 /* global dat */
 
-import { useEffect } from "react";
-
 let gui;
 let isCrosshairFixed = false;
 let threeD, volume, sliceX, sliceY, sliceZ;
@@ -15,6 +13,9 @@ export function destroyGUI() {
     gui = null;
   }
 }
+
+
+// function for update crosshair to given normalized point
 
 export function updateCrosshair(containerId, x, y, x_, y_, z_) {
     const svgNamespace = "http://www.w3.org/2000/svg";
@@ -76,9 +77,6 @@ export function updateCrosshair(containerId, x, y, x_, y_, z_) {
 export async function initialize(niiFile) {
 
     destroyGUI();
-    // Your existing JavaScript code, adjusted if necessary
-
-    // window.onload = function () {
 
         //
         // try to create the 3D renderer
@@ -130,14 +128,6 @@ export async function initialize(niiFile) {
 
         // console.log(X)
         volume = new X.volume();
-        // .. and attach the single-file dicom in .NRRD format
-        // this works with gzip/gz/raw encoded NRRD files but XTK also supports other
-        // formats like MGH/MGZ
-
-        // var fileURL = window.URL.createObjectURL(niiFile);
-        // console.log(fileURL)
-        // console.log("type: " + typeof(volume.file))
-        // volume.file = './Brats18_2013_1_1_t1ce.nii';
 
         console.log("1:", volume.file)
         console.log(volume.filedata)
@@ -146,30 +136,23 @@ export async function initialize(niiFile) {
 
         // console.log(typeof(volume.filedata);
 
-        async function hey()
+        async function LoadFileData()
         {
           await niiFile.arrayBuffer().then(result=>{
 
               volume.filedata = result;
-              // console.log('heyhey:', volume.filedata)
+              // console.log('File Data:', volume.filedata)
 
             })           
         }
 
-        const a1 = await hey();
+        const a1 = await LoadFileData();     // wait till file data loaded successfully
 
 
         console.log("volumn type : ",typeof(volume));
         console.log("file type : " + typeof(volume.file));
         console.log("volumn : ",volume);
         console.log(volume['filedata'])
-
-        // volume.file = 'https://x.babymri.org/?avf.nii';
-        // volume.file = 'E:\my_mri_visualizer\Brats18_2013_0_1_t1.nii';
-        // we also attach a label map to show segmentations on a slice-by-slice base
-        // volume.labelmap.file = 'http://x.babymri.org/?seg.nrrd';
-        // .. and use a color table to map the label map values to colors
-        // volume.labelmap.colortable.file = 'http://x.babymri.org/?genericanatomy.txt';
 
         // add the volume in the main renderer
         // we choose the sliceX here, since this should work also on
@@ -178,10 +161,6 @@ export async function initialize(niiFile) {
 
         // start the loading/rendering
         sliceX.render();
-
-
-
-
 
         //
         // THE GUI
@@ -208,6 +187,9 @@ export async function initialize(niiFile) {
             IndexZ = volume.indexZ;
 
             // console.log(gui)
+
+            // if Don't want right side GUI box then comment below code of GUI
+//-----------------------------------------------------------------------------------------------
 
             // now the real GUI
             gui = new dat.GUI();
@@ -240,7 +222,9 @@ export async function initialize(niiFile) {
                 volume.range[2] - 1);
             volumegui.open();
 
-//click event
+//--------------------------------------------------------------------------------------------
+
+//---------------- Click event begin------------------------
 
 document.getElementById("sliceX").addEventListener("click", function(event) {
   // console.log('click')
@@ -265,7 +249,9 @@ document.getElementById("sliceZ").addEventListener("click", function(event) {
   }
 });
 
-//arrowkey event
+//--------------------Click event end-------------------------
+
+//-------------------arrowkey event begin---------------------------------
 
 // Step 1: Make slice boxes focusable and handle click to focus
 ["sliceX", "sliceY", "sliceZ"].forEach(id => {
@@ -282,7 +268,6 @@ document.getElementById("sliceZ").addEventListener("click", function(event) {
 document.getElementById("sliceX").addEventListener("keydown", function(event) {
     event.stopPropagation();
     event.preventDefault();
-    // your existing sliceX keydown code here
 
     console.log('key')
     if(!isCrosshairFixed)
@@ -317,13 +302,14 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
   
     }
   
+    //Denormalization
+
     const X_normalizedY = volume.indexY / volume.range[1];
     const X_normalizedZ = volume.indexZ / volume.range[2];
 
     const x = X_normalizedY * sliceX_width;
     const y = X_normalizedZ * sliceX_height;
-  
-    // set crosshair for other planes
+
       //for plane Y
   
       const Y_normalizedX =  volume.indexX / volume.range[0];
@@ -359,7 +345,6 @@ document.getElementById("sliceX").addEventListener("keydown", function(event) {
 document.getElementById("sliceY").addEventListener("keydown", function(event) {
     event.stopPropagation();
     event.preventDefault();
-    // your existing sliceY keydown code here
 
     if(!isCrosshairFixed)
     isCrosshairFixed = true;
@@ -392,14 +377,15 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
       break;
   
     }
+
+    //Denormalization
   
     const Y_normalizedX = volume.indexX / volume.range[0];
     const Y_normalizedZ = volume.indexZ / volume.range[2];
 
     const x = Y_normalizedX * sliceY_width;
     const y = Y_normalizedZ * sliceY_height;
-  
-    // set crosshair for other planes
+
       //for plane X
   
       const X_normalizedY =  volume.indexY / volume.range[1];
@@ -434,7 +420,6 @@ document.getElementById("sliceY").addEventListener("keydown", function(event) {
 document.getElementById("sliceZ").addEventListener("keydown", function(event) {
     event.stopPropagation();
     event.preventDefault();
-    // your existing sliceZ keydown code here
 
     if(!isCrosshairFixed)
     isCrosshairFixed = true;
@@ -468,14 +453,15 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
 
   
     }
+
+    //Denormalization
   
     const Z_normalizedX = volume.indexX / volume.range[0];
     const Z_normalizedY = volume.indexY / volume.range[1];
     
     const x = Z_normalizedX * sliceZ_width;
     const y = Z_normalizedY * sliceZ_height;
-  
-    // set crosshair for other planes
+
       //for plane X
   
       const X_normalizedY =  volume.indexY / volume.range[1];
@@ -506,6 +492,10 @@ document.getElementById("sliceZ").addEventListener("keydown", function(event) {
       IndexZ = volume.indexZ;
 });
 
+//----------------------arrow key end-----------------------------------------
+
+//-----------------mousemove event begin--------------------------------------
+
 // Adding mousemove event listener to sliceX container
 document.getElementById("sliceX").addEventListener("mousemove", function (event) {
 
@@ -516,6 +506,7 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
+    //Normalization
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / sliceX_width;
     const normalizedY = y / sliceX_height;
@@ -559,6 +550,7 @@ document.getElementById("sliceX").addEventListener("mousemove", function (event)
     IndexZ = volume.indexZ;
 
         });
+
 // Adding mousemove event listener to sliceY container
 document.getElementById("sliceY").addEventListener("mousemove", function (event) {
 
@@ -569,6 +561,7 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
+    //Normalization
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / sliceY_width;
     const normalizedY = y / sliceY_height;
@@ -579,8 +572,6 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     // Update slices in other 2D renderers
     volume.indexX = newSliceX;
     volume.indexZ = newSliceZ;
-
-        // set crosshair for other planes
     
     //for plane X
 
@@ -612,7 +603,8 @@ document.getElementById("sliceY").addEventListener("mousemove", function (event)
     IndexZ = volume.indexZ;
 
         });
-// Adding mousemove event listener to sliceX container
+
+// Adding mousemove event listener to sliceZ container
 document.getElementById("sliceZ").addEventListener("mousemove", function (event) {
 
   if(isCrosshairFixed)
@@ -622,6 +614,7 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     const x = event.clientX - rect.left; // x position within the element.
     const y = event.clientY - rect.top;  // y position within the element.
 
+    //Normalization
     // Normalize these coordinates and map them to the volume dimensions
     const normalizedX = x / this.offsetWidth;
     const normalizedY = y / this.offsetHeight;
@@ -632,8 +625,6 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     // Update slices in other 2D renderers
     volume.indexX = newSliceX;
     volume.indexY = newSliceY;
-
-    // set crosshair for other planes
     
     //for plane X
 
@@ -666,17 +657,15 @@ document.getElementById("sliceZ").addEventListener("mousemove", function (event)
     IndexZ = volume.indexZ;
 
         });
-
-        // };
+//---------------------mousemove event end--------------------
 
     };
 
 
-    // ... (rest of your code)
-
 }
 
-export function setPoint(InX, InY, InZ){
+//function for set any point 
+export function setPoint(InX, InY, InZ){    // take normalized points
 
     isCrosshairFixed = true;
 
@@ -688,6 +677,7 @@ export function setPoint(InX, InY, InZ){
     console.log(volume.indexX, volume.indexY, volume.indexZ);
 
 
+    //Denormalization
     //for plane X
     const X_normalizedY = volume.indexY / volume.range[1];
     const X_normalizedZ = volume.indexZ / volume.range[2];
@@ -695,8 +685,7 @@ export function setPoint(InX, InY, InZ){
     const X_boxY = X_normalizedY * sliceX_width;
     const X_boxZ = X_normalizedZ * sliceX_height;
   
-    // set crosshair for other planes
-      //for plane Y
+    //for plane Y
   
     const Y_normalizedX =  volume.indexX / volume.range[0];
     const Y_normalizedZ =  volume.indexZ / volume.range[2];

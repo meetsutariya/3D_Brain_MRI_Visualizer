@@ -1,6 +1,5 @@
 import React ,{ useState }from 'react';
 import {
-  BrowserRouter as Router,
   Route,
   Routes,
 } from 'react-router-dom';
@@ -18,8 +17,6 @@ function App() {
     <div className="App">
         <RouteListener/>
         <Routes>
-          {/* <Route path="/"  element={<FileUploader/>} />
-          <Route path="/visualization" element={<Visualization/>} /> */}
           <Route path="/"  element={<FileUploader setUploadedFile={setUploadedFile} />} />
           <Route path="/visualization" element={<Visualization uploadedFile={uploadedFile} />} />
         

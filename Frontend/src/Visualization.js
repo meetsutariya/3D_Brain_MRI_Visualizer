@@ -2,22 +2,15 @@ import React, { useLayoutEffect } from "react";
 import { initialize, setPoint } from "./main";
 import Sidebar from './Sidebar';
 
-// export default function Visualization() {
 const Visualization = ({ uploadedFile }) => {
 
     useLayoutEffect(() => {
 
         if (uploadedFile) {
-            initialize(uploadedFile);  // Now your initialize function can directly access uploadedFile
+            initialize(uploadedFile);  // Now initialize function can directly access uploadedFile
         }
 
     }, [uploadedFile]);
-
-    // function handleChange() {
-    //     if (uploadedFile) {
-    //         initialize(uploadedFile);  // Now your initialize function can directly access uploadedFile
-    //     }
-    // }
 
     const handleEnter = (coordinates) => {
         const { x, y, z } = coordinates;

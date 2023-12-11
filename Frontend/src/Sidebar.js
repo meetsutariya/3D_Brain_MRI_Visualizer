@@ -13,12 +13,6 @@ const Sidebar = ({ onEnter }) => {
 
   const [error, setError] = useState('');
 
-  // useEffect(() => {
-  //   if (currentCoordinates) {
-  //     setCoordinates(currentCoordinates);
-  //   }
-  // }, [currentCoordinates]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -123,13 +117,6 @@ const SavedCoordinate = ({ coordinate, onSave, onGo, onDelete}) => {
   
   // Initialize coords state with default values to avoid undefined errors
   const [coords, setCoords] = useState({ x: 0, y: 0, z: 0 });
-
-  // Update the coords state when coordinate prop changes
-  // useEffect(() => {
-  //   if (coordinate && coordinate.x !== undefined && coordinate.y !== undefined && coordinate.z !== undefined) {
-  //     setCoords(coordinate);
-  //   }
-  // }, [coordinate]);
 
   useEffect(() => {
     console.log('coordinates: ', coordinate)
